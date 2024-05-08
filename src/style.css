@@ -1,17 +1,21 @@
+/* 定义根元素的自定义属性，用于设置主颜色 */
 :root {
   --primary-color: rgb(48, 48, 48);
 }
 
+/* 设置页面的基本样式 */
 body {
-  margin: 0;
-  cursor: url("/Genshin/T_Mouse.png"), default;
+  margin: 0; /* 去除边距 */
+  cursor: url("/Genshin/T_Mouse.png"), default; /* 自定义鼠标指针 */
 }
 
+/* 定义一个空洞的类，用于元素透明且不可点击 */
 .hollow {
   opacity: 0;
   pointer-events: none;
 }
 
+/* 全局应用容器 */
 #app {
   position: absolute;
   top: 0;
@@ -20,146 +24,161 @@ body {
   height: 100%;
 }
 
+/* 画布容器，覆盖整个页面 */
 #sketch {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* 隐藏溢出 */
 }
 
+/* 进度条样式定义 */
 .progress-bar {
-  --progress-bar-color: rgb(194, 194, 194);
+  --progress-bar-color: rgb(194, 194, 194); /* 进度条颜色 */
 
-  width: 41vmin;
+  width: 41vmin; /* 进度条宽度 */
 }
 
+/* 标题动画 */
 .title {
-  animation: fadeIn 1.5s ease-in-out forwards;
+  animation: fadeIn 1.5s ease-in-out forwards; /* 动画：淡入 */
 }
 
+/* 菜单动画 */
 .menu {
-  animation: fadeIn 1.5s ease-in-out forwards;
+  animation: fadeIn 1.5s ease-in-out forwards; /* 动画：淡入 */
 }
 
+/* 菜单项按钮样式 */
 .menu .menu-btn {
-  transition: all 0.2s;
+  transition: all 0.2s; /* 过渡效果 */
 }
 
+/* 菜单项按钮悬停样式 */
 .menu .menu-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.1); /* 放大比例 */
 }
 
+/* 菜单项按钮按下样式 */
 .menu .menu-btn:active {
-  transform: scale(0.9);
-  transition: all 0.1s;
+  transform: scale(0.9); /* 缩小比例 */
+  transition: all 0.1s; /* 快速过渡 */
 }
 
+/* 进场背景动画 */
 .enter-bg {
-  animation: enterBg 0.5s ease-in-out forwards;
+  animation: enterBg 0.5s ease-in-out forwards; /* 动画：进场背景 */
 }
 
+/* 进场入场动画 */
 .enter-entry {
-  animation: enterEntry 0.8s ease-in-out forwards;
+  animation: enterEntry 0.8s ease-in-out forwards; /* 动画：进场入场 */
 }
 
+/* 淡入动画关键帧 */
 @keyframes fadeIn {
   0% {
-    opacity: 0;
+    opacity: 0; /* 初始透明 */
   }
 
   100% {
-    opacity: 1;
+    opacity: 1; /* 完全不透明 */
   }
 }
 
+/* 进场背景动画关键帧 */
 @keyframes enterBg {
   0% {
-    opacity: 0;
-    transform: scaleY(0.1);
+    opacity: 0; /* 初始透明 */
+    transform: scaleY(0.1); /* 垂直压缩 */
   }
 
   10% {
-    opacity: 1;
-    transform: scaleY(0.1);
+    opacity: 1; /* 逐渐不透明 */
+    transform: scaleY(0.1); /* 垂直压缩 */
   }
 
   100% {
-    transform: scaleY(1);
+    transform: scaleY(1); /* 恢复原状 */
   }
 }
 
+/* 进场入场动画关键帧 */
 @keyframes enterEntry {
   0% {
-    opacity: 0;
+    opacity: 0; /* 初始透明 */
   }
 
   62.5% {
-    opacity: 0;
+    opacity: 0; /* 中间透明 */
   }
 
   100% {
-    opacity: 1;
+    opacity: 1; /* 最终不透明 */
   }
 }
 
+/* 页面底部免责声明样式 */
 .disclaimer {
   position: absolute;
-  bottom: 1%;
-  left: 1%;
-  width: 75vmin;
-  font-size: 0.4rem;
+  bottom: 1%; /* 底部位置 */
+  left: 1%; /* 左边位置 */
+  width: 75vmin; /* 宽度 */
+  font-size: 0.4rem; /* 字号 */
 }
 
+/* 加载元素样式定义 */
 .loading-element .loading-element-wrapper {
-  --loading-element-width: 72vmin;
-  --loading-element-height: calc(var(--loading-element-width) / 8);
-  --loading-element-bar-color: #f5f5f5;
-  --loading-element-progress-color: #666666;
-  --loading-element-img-top: var(--loading-element-width);
-  --loading-element-shadow-offset: calc(var(--loading-element-img-top) * -1);
-  --loading-element-progress: 0%;
-  /* --loading-element-progress: 94.4%; */
+  --loading-element-width: 72vmin; /* 宽度 */
+  --loading-element-height: calc(var(--loading-element-width) / 8); /* 高度 */
+  --loading-element-bar-color: #f5f5f5; /* 背景条颜色 */
+  --loading-element-progress-color: #666666; /* 进度条颜色 */
+  --loading-element-img-top: var(--loading-element-width); /* 图片顶部位置 */
+  --loading-element-shadow-offset: calc(var(--loading-element-img-top) * -1); /* 阴影偏移 */
+  --loading-element-progress: 0%; /* 进度条初始宽度 */
 
-  position: relative;
-  width: var(--loading-element-width);
-  height: var(--loading-element-height);
+  position: relative; /* 相对定位 */
+  width: var(--loading-element-width); /* 宽度 */
+  height: var(--loading-element-height); /* 高度 */
 }
 
+/* 加载图片样式 */
 .loading-element .loading-element-img {
-  position: absolute;
-  top: var(--loading-element-img-top);
-  left: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+  position: absolute; /* 绝对定位 */
+  top: var(--loading-element-img-top); /* 顶部位置 */
+  left: 0; /* 左边位置 */
+  display: block; /* 显示为块级元素 */
+  width: 100%; /* 宽度占满 */
+  height: 100%; /* 高度占满 */
   filter: drop-shadow(
     0 var(--loading-element-shadow-offset) 0 var(--loading-element-bar-color)
-  );
-  transform: rotateZ(0);
+  ); /* 添加阴影效果 */
+  transform: rotateZ(0); /* 旋转 */
 }
 
+/* 进度条伪元素样式 */
 .loading-element .loading-element-wrapper::before {
-  position: absolute;
-  content: "";
-  z-index: 1;
-  top: var(--loading-element-img-top);
-  left: 0;
-  /* width: var(--loading-element-progress); */
-  width: 0%;
-  height: 100%;
+  position: absolute; /* 绝对定位 */
+  content: ""; /* 内容为空 */
+  z-index: 1; /* 层叠顺序 */
+  top: var(--loading-element-img-top); /* 顶部位置 */
+  left: 0; /* 左边位置 */
+  width: 0%; /* 初始宽度为0 */
+  height: 100%; /* 高度占满 */
   filter: drop-shadow(
     0 var(--loading-element-shadow-offset) 0
       var(--loading-element-progress-color)
-  );
-  transform: rotateZ(0);
-  background: url("/Genshin/Elements.png") no-repeat left 100%;
-  background-size: var(--loading-element-width) var(--loading-element-height);
-  background-position-x: 0;
-  /* animation: loading-element 3.5s infinite forwards; */
+  ); /* 添加阴影效果 */
+  transform: rotateZ(0); /* 旋转 */
+  background: url("/Genshin/Elements.png") no-repeat left 100%; /* 背景图片 */
+  background-size: var(--loading-element-width) var(--loading-element-height); /* 背景大小 */
+  background-position-x: 0; /* 背景位置 */
+  /* animation: loading-element 3.5s infinite forwards; */ /* 动画：加载进度 */
 }
 
+/* 注释掉的加载动画关键帧 */
 /* @keyframes loading-element {
   0% {
     width: 0;

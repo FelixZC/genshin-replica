@@ -1,5 +1,10 @@
 // https://ycw.github.io/three-shaderlib-skim/dist/#/latest/standard/fragment
-// 将原本的RE_Direct转为自定义的RE_Direct_ToonPhysical
+/**
+ * 将原本的RE_Direct转为自定义的RE_Direct_ToonPhysical，用于物理基础的卡通着色。
+ * 该部分代码处理了来自不同光源（点光源、聚光灯、平行光）的直接光照计算，
+ * 包括普通材质和特殊材质（如金属和清漆）的光照反射。
+ */
+// 初始化几何位置、法线和视图方向
 vec3 geometryPosition=-vViewPosition;
 vec3 geometryNormal=normal;
 vec3 geometryViewDir=(isOrthographic)?vec3(0,0,1):normalize(vViewPosition);
@@ -8,6 +13,7 @@ vec3 geometryClearcoatNormal;
 geometryClearcoatNormal=clearcoatNormal;
 #endif
 #ifdef USE_IRIDESCENCE
+// 处理干涉色效果
 float dotNVi=saturate(dot(normal,geometryViewDir));
 if(material.iridescenceThickness==0.){
     material.iridescence=0.;
@@ -19,8 +25,11 @@ if(material.iridescence>0.){
     material.iridescenceF0=Schlick_to_F0(material.iridescenceFresnel,1.,dotNVi);
 }
 #endif
+
+// 直接光照计算开始
 IncidentLight directLight;
 #if(NUM_POINT_LIGHTS>0)&&defined(RE_Direct)
+// 对每个点光源进行光照计算
 PointLight pointLight;
 #if defined(USE_SHADOWMAP)&&NUM_POINT_LIGHT_SHADOWS>0
 PointLightShadow pointLightShadow;
@@ -33,11 +42,13 @@ for(int i=0;i<NUM_POINT_LIGHTS;i++){
     pointLightShadow=pointLightShadows[i];
     directLight.color*=(directLight.visible&&receiveShadow)?getPointShadow(pointShadowMap[i],pointLightShadow.shadowMapSize,pointLightShadow.shadowBias,pointLightShadow.shadowRadius,vPointShadowCoord[i],pointLightShadow.shadowCameraNear,pointLightShadow.shadowCameraFar):1.;
     #endif
+    // 对当前点光源进行直接光照计算
     RE_Direct(directLight,geometryPosition,geometryNormal,geometryViewDir,geometryClearcoatNormal,material,reflectedLight);
 }
 #pragma unroll_loop_end
 #endif
 #if(NUM_SPOT_LIGHTS>0)&&defined(RE_Direct)
+// 对每个聚光灯进行光照计算
 SpotLight spotLight;
 vec4 spotColor;
 vec3 spotLightCoord;
@@ -67,11 +78,13 @@ for(int i=0;i<NUM_SPOT_LIGHTS;i++){
     spotLightShadow=spotLightShadows[i];
     directLight.color*=(directLight.visible&&receiveShadow)?getShadow(spotShadowMap[i],spotLightShadow.shadowMapSize,spotLightShadow.shadowBias,spotLightShadow.shadowRadius,vSpotLightCoord[i]):1.;
     #endif
+    // 对当前聚光灯进行直接光照计算
     RE_Direct(directLight,geometryPosition,geometryNormal,geometryViewDir,geometryClearcoatNormal,material,reflectedLight);
 }
 #pragma unroll_loop_end
 #endif
 #if(NUM_DIR_LIGHTS>0)&&defined(RE_Direct)
+// 对每个平行光进行光照计算
 DirectionalLight directionalLight;
 #if defined(USE_SHADOWMAP)&&NUM_DIR_LIGHT_SHADOWS>0
 DirectionalLightShadow directionalLightShadow;
@@ -84,12 +97,13 @@ for(int i=0;i<NUM_DIR_LIGHTS;i++){
     directionalLightShadow=directionalLightShadows[i];
     directLight.color*=(directLight.visible&&receiveShadow)?getShadow(directionalShadowMap[i],directionalLightShadow.shadowMapSize,directionalLightShadow.shadowBias,directionalLightShadow.shadowRadius,vDirectionalShadowCoord[i]):1.;
     #endif
-    // RE_Direct(directLight,geometryPosition,geometryNormal,geometryViewDir,geometryClearcoatNormal,material,reflectedLight);
+    // 使用自定义的RE_Direct_ToonPhysical进行平行光的直接光照计算
     RE_Direct_ToonPhysical(directLight,geometryPosition,geometryNormal,geometryViewDir,geometryClearcoatNormal,material,reflectedLight,metalnessFactor);
 }
 #pragma unroll_loop_end
 #endif
 #if(NUM_RECT_AREA_LIGHTS>0)&&defined(RE_Direct_RectArea)
+// 对每个矩形面积光进行光照计算
 RectAreaLight rectAreaLight;
 #pragma unroll_loop_start
 for(int i=0;i<NUM_RECT_AREA_LIGHTS;i++){
@@ -98,6 +112,8 @@ for(int i=0;i<NUM_RECT_AREA_LIGHTS;i++){
 }
 #pragma unroll_loop_end
 #endif
+
+// 如果定义了RE_IndirectDiffuse，进行间接漫反射光照计算
 #if defined(RE_IndirectDiffuse)
 vec3 iblIrradiance=vec3(0.);
 vec3 irradiance=getAmbientLightIrradiance(ambientLightColor);
@@ -112,6 +128,8 @@ for(int i=0;i<NUM_HEMI_LIGHTS;i++){
 #pragma unroll_loop_end
 #endif
 #endif
+
+// 如果定义了RE_IndirectSpecular，进行间接镜面反射光照计算
 #if defined(RE_IndirectSpecular)
 vec3 radiance=vec3(0.);
 vec3 clearcoatRadiance=vec3(0.);

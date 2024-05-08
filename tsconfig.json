@@ -1,23 +1,24 @@
 {
+  // 编译器选项配置
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
+    "target": "ES2020", // 目标JavaScript版本
+    "useDefineForClassFields": true, // 在类字段中使用 defineProperty 而不是直接分配
+    "module": "ESNext", // 模块系统使用 ESNext
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 使用的库文件
+    "skipLibCheck": true, // 跳过库的类型检查
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    /* 在 bundler 模式下的配置 */
+    "moduleResolution": "bundler", // 模块解析策略为 bundler
+    "allowImportingTsExtensions": true, // 允许导入 TypeScript 扩展名的文件
+    "resolveJsonModule": true, // 自动解析 JSON 模块
+    "isolatedModules": true, // 每个文件作为单独的模块处理
+    "noEmit": true, // 不输出编译结果
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    /* Linting 配置 */
+    "strict": true, // 启用所有严格类型检查选项
+    "noUnusedLocals": true, // 报告未使用的局部变量
+    "noUnusedParameters": true, // 报告未使用的函数参数
+    "noFallthroughCasesInSwitch": true // 在 switch 语句中，禁止案件穿透
   },
-  "include": ["src"]
+  "include": ["src"] // 指定需要包含进行类型检查的文件或目录
 }

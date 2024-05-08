@@ -9,15 +9,24 @@ import { meshList } from "../Data/column";
 import { getToonMaterialColumn } from "../utils";
 import config from "../config";
 
+/**
+ * 表示一个柱状物体的组件类，继承自kokomi.Component。
+ * 用于创建和管理一系列柱状物体的实例和它们的3D网格表示。
+ */
 export default class Column extends kokomi.Component {
-  declare base: Experience;
-  meshInfos: MeshInfo[];
-  instanceInfos: InstanceInfo[];
-  uj: kokomi.UniformInjector;
+  declare base: Experience; // 声明Experience类型的基类
+  meshInfos: MeshInfo[]; // 存储网格信息的数组
+  instanceInfos: InstanceInfo[]; // 存储实例信息的数组
+  uj: kokomi.UniformInjector; // 存储UniformInjector实例，用于注入统一变量
+
+  /**
+   * 构造函数，初始化Column组件。
+   * @param base - Experience类型的基类实例，提供必要的场景和相机等信息。
+   */
   constructor(base: Experience) {
     super(base);
 
-    // 转化所有物体的属性格式
+    // 初始化meshInfos数组，转换meshList中每个物体的属性格式
     const meshInfos = meshList.map((item) => {
       return {
         object: item.object,
@@ -38,7 +47,7 @@ export default class Column extends kokomi.Component {
     });
     this.meshInfos = meshInfos;
 
-    // 柱子有多个种类，需要将其分组
+    // 根据object属性将柱状物体制成组
     const meshGroup = ky.groupBy(
       meshInfos,
       (item: MeshInfo) => item.object
@@ -52,6 +61,7 @@ export default class Column extends kokomi.Component {
     const uj = new kokomi.UniformInjector(this.base);
     this.uj = uj;
 
+    // 为每个实例创建对应的Three.js InstancedMesh，并设置相应的材质和属性
     this.instanceInfos.forEach((item) => {
       const model = this.base.am.items[item.object] as STDLIB.GLTF;
       // @ts-ignore
@@ -71,6 +81,10 @@ export default class Column extends kokomi.Component {
       });
     });
   }
+
+  /**
+   * 将所有实例的网格添加到场景容器中。
+   */
   addExisting(): void {
     this.instanceInfos.forEach((item) => {
       item.meshList.forEach((e) => {
@@ -78,11 +92,18 @@ export default class Column extends kokomi.Component {
       });
     });
   }
+
+  /**
+   * 更新所有实例的位置和属性。
+   */
   update(): void {
     this.keepInfinite();
     this.updateInstance();
   }
-  // 将所有物体属性同步到网格上
+
+  /**
+   * 同步实例信息到对应的网格实例上，更新其位置、旋转和缩放。
+   */
   updateInstance() {
     this.instanceInfos.forEach((item) => {
       item.meshList.forEach((mesh) => {
@@ -95,7 +116,10 @@ export default class Column extends kokomi.Component {
       });
     });
   }
-  // 无限延伸，本质上是一种移动物体位置的障眼法
+
+  /**
+   * 实现柱状物体的无限延伸效果，通过周期性移动物体的位置来模拟。
+   */
   keepInfinite() {
     this.instanceInfos.forEach((item) => {
       item.meshList.forEach(() => {
